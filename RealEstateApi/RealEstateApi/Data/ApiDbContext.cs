@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MySqlConnector;
 using RealEstateApi.Models;
 
 namespace RealEstateApi.Data
@@ -12,7 +13,16 @@ namespace RealEstateApi.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-          optionsBuilder.UseSqlServer(@"Server=(localdb)\MSSQLLocalDB;Database=ReaEstateDb01;");
+            var connectionStringBuilder = new MySqlConnectionStringBuilder();
+            connectionStringBuilder.Server = "localhost";
+            connectionStringBuilder.Database = "TODO";
+            connectionStringBuilder.Port = 3306;
+            connectionStringBuilder.UserID = "TODO";
+            connectionStringBuilder.Password = "TODO";
+
+            var connectionString = connectionStringBuilder.ToString();
+            var serverVersion = ServerVersion.AutoDetect(connectionString);
+            optionsBuilder.UseMySql(connectionString, serverVersion);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
